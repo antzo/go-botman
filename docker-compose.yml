@@ -1,0 +1,23 @@
+version: "3.6"
+services:
+  goservice:
+    build: "."
+    ports:
+      - "8081"
+  nginx:
+    build: "./nginx"
+    ports:
+      - "80:80"
+    depends_on:
+      - "goservice"
+  ngrok:
+    image: wernight/ngrok
+    ports:
+      - "4040:4040"
+    links:
+      - nginx
+    depends_on:
+      - "nginx"
+    environment:
+      - NGROK_REGION=eu
+      - NGROK_PORT=nginx:80
